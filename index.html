@@ -8,10 +8,28 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #012829; }
     canvas { display: block; position: fixed; inset: 0; width: 100%; height: 100%; }
+    #logo-wrap {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 12vh;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .logo-img {
+      position: absolute;
+      width: min(420px, 72vw);
+      opacity: 0;
+      transition: opacity 0.55s ease-in-out;
+    }
+    .logo-img.visible { opacity: 1; }
   </style>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="logo-wrap"></div>
 <script>
 const canvas = document.getElementById('c');
 const ctx    = canvas.getContext('2d');
@@ -100,6 +118,35 @@ function render(t) {
 }
 
 requestAnimationFrame(render);
+
+/* ── Logo cycler ─────────────────────────────────────────── */
+const logoFiles = [
+  'assets/logos/biobliss-white-wordmark.png',
+  'assets/logos/biobliss-sea-wordmark.png',
+  'assets/logos/biobliss-deep-green-wordmark.png',
+  'assets/logos/biobliss-rain-forest-wordmark.png',
+  'assets/logos/biobliss-blue-green-wordmark.png',
+  'assets/logos/biobliss-black-wordmark.png',
+];
+
+const wrap = document.getElementById('logo-wrap');
+const imgs = logoFiles.map(src => {
+  const img = document.createElement('img');
+  img.className = 'logo-img';
+  img.src = src;
+  img.alt = 'BioBliss Life';
+  wrap.appendChild(img);
+  return img;
+});
+
+let current = 0;
+imgs[0].classList.add('visible');
+
+setInterval(() => {
+  imgs[current].classList.remove('visible');
+  current = (current + 1) % imgs.length;
+  imgs[current].classList.add('visible');
+}, 900);
 </script>
 </body>
 </html>
