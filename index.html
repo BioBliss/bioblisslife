@@ -4,32 +4,85 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BioBliss Life</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Halogen';
+      src: url('assets/fonts/woff2/halogen-flare-pro-regular.woff2') format('woff2'),
+           url('assets/fonts/woff/halogen-flare-pro-regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #012829; }
     canvas { display: block; position: fixed; inset: 0; width: 100%; height: 100%; }
+
     #logo-wrap {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-bottom: calc(12vh + 96px);
       pointer-events: none;
       z-index: 10;
     }
+
+    #content-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transform: translateY(-6%);
+    }
+
+    #logo-container {
+      position: relative;
+      width: min(630px, 90vw);
+      height: min(126px, 18vw);
+    }
+
     .logo-img {
       position: absolute;
-      width: min(630px, 90vw);
+      inset: 0;
+      width: 100%;
       opacity: 0;
       transition: opacity 0.55s ease-in-out;
     }
     .logo-img.visible { opacity: 1; }
+
+    #feeling-good {
+      font-family: 'Halogen', sans-serif;
+      font-size: 380px;
+      line-height: 0.88;
+      color: #ffffff;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-family: 'Sora', sans-serif;
+      font-size: 150px;
+      font-weight: 300;
+      line-height: 1.1;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
   </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="logo-wrap"></div>
+<div id="logo-wrap">
+  <div id="content-col">
+    <div id="logo-container"></div>
+    <div id="feeling-good">Feeling Good</div>
+    <div class="subtitle">Experiential Biohacking Boutique</div>
+    <div class="subtitle">Coming Soon - Miami Beach</div>
+  </div>
+</div>
 <script>
 const canvas = document.getElementById('c');
 const ctx    = canvas.getContext('2d');
@@ -43,23 +96,14 @@ window.addEventListener('resize', resize);
 resize();
 
 /* ── Blob definitions ───────────────────────────────────── */
-/* Each blob orbits around a base position (bx, by)
-   with elliptical radii (rx, ry), speed sp, phase offset ph,
-   blob radius sz (as fraction of screen short-edge),
-   and a color */
 const blobs = [
-  /* Large edge blobs */
   { bx:0.10, by:0.28, rx:0.38, ry:0.26, sp:0.00022, ph:0.00, col:'#449BA5', sz:0.55 },
   { bx:0.82, by:0.62, rx:0.30, ry:0.30, sp:0.00019, ph:2.09, col:'#03735E', sz:0.52 },
   { bx:0.50, by:0.95, rx:0.34, ry:0.18, sp:0.00015, ph:4.19, col:'#025148', sz:0.58 },
   { bx:0.88, by:0.18, rx:0.24, ry:0.22, sp:0.00021, ph:1.05, col:'#449BA5', sz:0.46 },
-
-  /* Mid blobs */
   { bx:0.46, by:0.48, rx:0.26, ry:0.26, sp:0.00031, ph:3.49, col:'#60B39F', sz:0.40 },
   { bx:0.22, by:0.72, rx:0.22, ry:0.24, sp:0.00027, ph:5.24, col:'#449BA5', sz:0.36 },
   { bx:0.72, by:0.32, rx:0.24, ry:0.20, sp:0.00024, ph:1.75, col:'#60B39F', sz:0.33 },
-
-  /* Small highlights */
   { bx:0.18, by:0.12, rx:0.16, ry:0.14, sp:0.00038, ph:0.60, col:'#60B39F', sz:0.24 },
   { bx:0.84, by:0.88, rx:0.18, ry:0.16, sp:0.00034, ph:4.10, col:'#449BA5', sz:0.22 },
   { bx:0.58, by:0.10, rx:0.20, ry:0.14, sp:0.00029, ph:2.80, col:'#03735E', sz:0.26 },
@@ -97,16 +141,13 @@ function drawBlob(blob, t) {
 function render(t) {
   const W = canvas.width, H = canvas.height;
 
-  /* Dark base */
   ctx.globalCompositeOperation = 'source-over';
   ctx.fillStyle = '#012829';
   ctx.fillRect(0, 0, W, H);
 
-  /* Blobs — screen blend makes overlaps glow brighter */
   ctx.globalCompositeOperation = 'screen';
   for (const b of blobs) drawBlob(b, t);
 
-  /* Vignette overlay */
   ctx.globalCompositeOperation = 'source-over';
   const vig = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.82);
   vig.addColorStop(0, 'rgba(0,0,0,0)');
@@ -128,13 +169,13 @@ const logoFiles = [
   'assets/logos/biobliss-blue-green-wordmark.png',
 ];
 
-const wrap = document.getElementById('logo-wrap');
+const logoContainer = document.getElementById('logo-container');
 const imgs = logoFiles.map(src => {
   const img = document.createElement('img');
   img.className = 'logo-img';
   img.src = src;
   img.alt = 'BioBliss Life';
-  wrap.appendChild(img);
+  logoContainer.appendChild(img);
   return img;
 });
 
