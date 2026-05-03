@@ -4,8 +4,211 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BioBliss Life</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Sora:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────────── */
+    :root {
+      --bb-deep-green:  #023234;
+      --bb-dark-aqua:   #02514C;
+      --bb-rainforest:  #03735E;
+      --bb-sea:         #449BA5;
+      --bb-mint:        #60B39F;
+      --bb-white:       #FFFFFF;
+      --bb-cream:       #F5F2ED;
+    }
+
+    /* ─── Base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Sora', system-ui, sans-serif;
+      background: var(--bb-deep-green);
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Hero Section ───────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: min(100svh, 800px);
+      min-height: 560px;
+      overflow: hidden;
+      background: var(--bb-deep-green);
+    }
+
+    /* ─── Animated Background Layers ────────────────────────── */
+    .hero-bg-layer {
+      position: absolute;
+      inset: -12%;
+      width: 124%;
+      height: 124%;
+      will-change: transform;
+    }
+    .hero-bg-layer--primary {
+      background-image:
+        radial-gradient(ellipse 70% 55% at 12% 22%, rgba(68,155,165,0.70) 0%, transparent 60%),
+        radial-gradient(ellipse 48% 68% at 78% 12%, rgba(96,179,159,0.50) 0%, transparent 58%),
+        radial-gradient(ellipse 55% 48% at 55% 78%, rgba(3,115,94,0.60) 0%, transparent 60%),
+        radial-gradient(ellipse 38% 58% at 88% 68%, rgba(2,81,76,0.65) 0%, transparent 50%),
+        radial-gradient(ellipse 45% 38% at 32% 52%, rgba(68,155,165,0.38) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 70% at 60% 35%, rgba(3,115,94,0.30) 0%, transparent 65%),
+        linear-gradient(150deg, #012a2c 0%, #023234 25%, #02514C 55%, #03735E 78%, #023234 100%);
+      animation: heroFloat1 24s ease-in-out infinite;
+    }
+    .hero-bg-layer--secondary {
+      background-image:
+        radial-gradient(ellipse 58% 65% at 82% 28%, rgba(96,179,159,0.75) 0%, transparent 58%),
+        radial-gradient(ellipse 42% 52% at 18% 72%, rgba(68,155,165,0.55) 0%, transparent 55%),
+        radial-gradient(ellipse 65% 42% at 48% 48%, rgba(3,115,94,0.45) 0%, transparent 62%),
+        linear-gradient(45deg, #02514C 0%, #03735E 50%, #449BA5 100%);
+      mix-blend-mode: screen;
+      opacity: 0.28;
+      animation: heroFloat2 31s ease-in-out infinite;
+    }
+    @keyframes heroFloat1 {
+      0%   { transform: scale(1.00) translate(0%, 0%); }
+      20%  { transform: scale(1.03) translate(1.2%, -0.8%); }
+      45%  { transform: scale(1.08) translate(-0.8%, 1.4%); }
+      70%  { transform: scale(1.05) translate(-1.4%, -0.5%); }
+      100% { transform: scale(1.00) translate(0%, 0%); }
+    }
+    @keyframes heroFloat2 {
+      0%   { transform: scale(1.06) translate(-1.8%, 0.9%); }
+      33%  { transform: scale(1.00) translate(1.8%, -1.4%); }
+      66%  { transform: scale(1.05) translate(0.9%, 1.8%); }
+      100% { transform: scale(1.06) translate(-1.8%, 0.9%); }
+    }
+
+    /* ─── Hero Vignette ──────────────────────────────────────── */
+    .hero-vignette {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(to bottom,
+        transparent 0%, rgba(2,50,52,0.55) 45%, rgba(2,50,52,0.92) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ─── Hero Content ───────────────────────────────────────── */
+    .hero-content {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(1.5rem, 5vw, 4.5rem) clamp(1.5rem, 6vw, 5rem);
+    }
+
+    /* ─── Typography ─────────────────────────────────────────── */
+    .hero-headline {
+      font-family: 'Gruppo', system-ui, sans-serif;
+      font-size: clamp(50px, 8.4vw, 112px);
+      font-weight: 400;
+      line-height: 0.95;
+      color: #fff;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-sub {
+      color: rgba(255,255,255,0.78);
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      font-weight: 300;
+      max-width: 460px;
+      line-height: 1.65;
+      margin: 0 auto 2.5rem;
+    }
+    .label-editorial {
+      font-family: 'Fraunces', Georgia, serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--bb-mint);
+    }
+
+    /* ─── Button ─────────────────────────────────────────────── */
+    .btn-mint {
+      display: inline-block;
+      background: var(--bb-mint);
+      color: var(--bb-deep-green);
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.03em;
+      padding: 0.875rem 2rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: transform 0.22s ease, filter 0.22s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-mint:hover { transform: scale(1.025); filter: brightness(1.08); }
+
+    .btn-ghost {
+      color: rgba(255,255,255,0.85);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding-bottom: 1px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.45); }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.25rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>Coming Soon</h1>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+
+  <!-- Animated gradient background -->
+  <div class="hero-bg-layer hero-bg-layer--primary"></div>
+  <div class="hero-bg-layer hero-bg-layer--secondary"></div>
+
+  <!-- Bottom vignette -->
+  <div class="hero-vignette"></div>
+
+  <!-- Content -->
+  <div class="hero-content">
+    <div style="max-width: min(1100px, 90vw);">
+      <p class="label-editorial" style="margin-bottom: 1.5rem;">Welcome to BioBliss Life</p>
+      <h1 class="hero-headline">Feel more you.</h1>
+      <p class="hero-sub">
+        Your journey to wellness starts here.
+      </p>
+      <div class="hero-cta">
+        <a href="#" class="btn-mint">Get Started</a>
+        <a href="#" class="btn-ghost">Learn more →</a>
+      </div>
+      <p class="label-editorial" style="color: rgba(255,255,255,0.50); letter-spacing: 0.18em;">
+        Live beautifully. Live well.
+      </p>
+    </div>
+  </div>
+
+</section>
+
 </body>
 </html>
